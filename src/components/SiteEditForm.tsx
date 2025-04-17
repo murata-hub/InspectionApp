@@ -142,13 +142,13 @@ const SiteEditForm = ({ onClose, site, company, permittedCompanies }: { onClose:
             console.log(formData);
 
             const newSiteId = data[0]?.id; // 更新された現場ID
-            console.log("✅ 現場更新成功! site_id:", newSiteId);
+            // console.log("✅ 現場更新成功! site_id:", newSiteId);
 
-            // **Step 2: `site_companies` を更新**
-            console.log("🚀 Step 2: `site_companies` 更新開始");
+            // // **Step 2: `site_companies` を更新**
+            // console.log("🚀 Step 2: `site_companies` 更新開始");
 
-            // **Step 2: `site_companies` の更新**
-            console.log("🚀 Step 2: `site_companies` を更新");
+            // // **Step 2: `site_companies` の更新**
+            // console.log("🚀 Step 2: `site_companies` を更新");
 
             const currentCompanyId = siteCompanies[0]?.company_id;
             const newCompanyId = selectedCompany?.id;
@@ -177,7 +177,7 @@ const SiteEditForm = ({ onClose, site, company, permittedCompanies }: { onClose:
 
             alert("✅ 現場情報を更新しました！");
             onClose(); // モーダルを閉じる
-            // window.location.reload();
+            window.location.reload();
         } catch (error: any) {
             // console.error("❌ 登録エラー:", error.message);
             alert(`エラー: ${error.message}`);
