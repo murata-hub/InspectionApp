@@ -123,7 +123,7 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
                     <label className="block mb-4">
                         <input
                             type="text"
-                            name="architect_office_name"
+                            id="architect_office_name"
                             className="w-64 px-4 py-2 border rounded-lg"
                             value={formData.architect_office_name || ""}
                             onChange={handleChange}
@@ -135,14 +135,14 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="governor_registration_name"
+                            id="governor_registration_name"
                             value={formData.governor_registration_name || ""}
                             onChange={handleChange}
                         /> 知事登録 第 
                         <input
                             type="text"
                             className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                            name="governor_registration_number"
+                            id="governor_registration_number"
                             value={formData.governor_registration_number || ""}
                             onChange={handleChange}
                         /> 号
@@ -158,7 +158,7 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="architect_name"
+                            id="architect_name"
                             value={formData.architect_name || ""}
                             onChange={handleChange}
                         /> 建築士
@@ -169,14 +169,14 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="architect_registration_name"
+                            id="architect_registration_name"
                             value={formData.architect_registration_name || ""}
                             onChange={handleChange}
                         /> 登録 第 
                         <input
                             type="text"
                             className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                            name="architect_registration_number"
+                            id="architect_registration_number"
                             value={formData.architect_registration_number || ""}
                             onChange={handleChange}
                         /> 号
@@ -189,7 +189,7 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
                     <input
                         type="text"
                         className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                        name="fire_protection_inspector_number"
+                        id="fire_protection_inspector_number"
                         value={formData.fire_protection_inspector_number || ""}
                         onChange={handleChange}
                     /> 号

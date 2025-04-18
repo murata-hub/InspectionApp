@@ -86,12 +86,6 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
     
             const sanitizedFormData = {
                 ...formData,
-                // hire_date: formData.hire_date || null,
-                // birthdate: formData.birthdate || null,
-                // health_check_date: formData.health_check_date || null,
-                // special_health_check_date: formData.special_health_check_date || null,
-                // sending_education_date: formData.sending_education_date || null,
-                // receiving_education_date: formData.receiving_education_date || null,
             };
     
             const createResult = await updateInspector(editTarget.id, sanitizedFormData);
@@ -139,7 +133,7 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
                     <label className="block mb-4">
                         <input
                             type="text"
-                            name="architect_office_name"
+                            id="architect_office_name"
                             className="w-64 px-4 py-2 border rounded-lg"
                             value={formData.architect_office_name || ""}
                             onChange={handleChange}
@@ -151,14 +145,14 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="governor_registration_name"
+                            id="governor_registration_name"
                             value={formData.governor_registration_name || ""}
                             onChange={handleChange}
                         /> 知事登録 第 
                         <input
                             type="text"
                             className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                            name="governor_registration_number"
+                            id="governor_registration_number"
                             value={formData.governor_registration_number || ""}
                             onChange={handleChange}
                         /> 号
@@ -174,7 +168,7 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="architect_name"
+                            id="architect_name"
                             value={formData.architect_name || ""}
                             onChange={handleChange}
                         /> 建築士
@@ -185,14 +179,14 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
                         <input
                             type="text"
                             className="w-64 px-4 py-2 border rounded-lg"
-                            name="architect_registration_name"
+                            id="architect_registration_name"
                             value={formData.architect_registration_name || ""}
                             onChange={handleChange}
                         /> 登録 第 
                         <input
                             type="text"
                             className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                            name="architect_registration_number"
+                            id="architect_registration_number"
                             value={formData.architect_registration_number || ""}
                             onChange={handleChange}
                         /> 号
@@ -205,7 +199,7 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
                     <input
                         type="text"
                         className="ml-2 w-64 px-4 py-2 border rounded-lg"
-                        name="fire_protection_inspector_number"
+                        id="fire_protection_inspector_number"
                         value={formData.fire_protection_inspector_number || ""}
                         onChange={handleChange}
                     /> 号
