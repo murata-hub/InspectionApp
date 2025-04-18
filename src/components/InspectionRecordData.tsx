@@ -9,7 +9,6 @@ import { useSites } from "@/lib/hooks/useSites";
 import { useShutters } from "@/lib/hooks/useShutters";
 import { useInspectors } from "@/lib/hooks/useInspectors";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { supabaseEdgeUrl, supabaseAnonKey } from "@/lib/supabase";
 
 const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectionRecord: InspectionRecord; showExcelButton: boolean; }) => {
     const { fetchInspectionResults, inspectionResults, error } = useInspectionResults();
@@ -115,18 +114,24 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
 
                     console.log("📦 JSON to send:", JSON.stringify(excelJson, null, 2));
 
-                    // ✅ Edge Function 経由で Lambda 呼び出し
                     // const res = await fetch("/api/excel-export", {
                     //     method: "POST",
                     //     headers: { "Content-Type": "application/json" },
                     //     body: JSON.stringify(excelJson),
                     // });
+                    // supabaseのエンドポイントとキーを取得
+                    const apiInfoRes = await fetch("/api/excel-export");
+                    if (!apiInfoRes.ok) throw new Error("API情報の取得に失敗しました");
+
+                    const { supabaseEdgeUrl, supabaseAnonKey } = await apiInfoRes.json();
+                                        
+                    // ✅ Edge Function 経由で Lambda 呼び出し フロントエンドから実行する
                     console.log(supabaseEdgeUrl);
                     const res = await fetch(supabaseEdgeUrl, {
                         method: "POST",
                         headers: {
-                          "Content-Type": "application/json",
-                          "Authorization": `Bearer ${supabaseAnonKey}`,
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${supabaseAnonKey}`,
                         },
                         body: JSON.stringify(excelJson),
                     });

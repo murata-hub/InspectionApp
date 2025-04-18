@@ -1,6 +1,13 @@
 // app/api/excel-export/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+    return NextResponse.json({
+        supabaseEdgeUrl: process.env.SUPABASE_EDGE_URL,
+        supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    });
+}
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
