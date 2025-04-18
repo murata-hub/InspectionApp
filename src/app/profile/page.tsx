@@ -158,7 +158,7 @@ export default function ProfilePage() {
 
             // 会社登録後にパーミッションを処理
             if (form.type === "協力会社") {
-                handlePermissionsUpdate(form.id, granterCompanyId, form.name);
+                await handlePermissionsUpdate(form.id, granterCompanyId, form.name);
             }
 
             alert("登録/更新が成功しました！");
