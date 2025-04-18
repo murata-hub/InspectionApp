@@ -1,34 +1,51 @@
 // supabase/functions/excel_export/index.ts
 import { serve } from "https://deno.land/std/http/server.ts";
-
-serve(async (req) => {
-    try {
-        const body = await req.json();
-        // console.log("📦 フロントから受け取ったデータ:", body);
-
-        const lambdaRes = await fetch(Deno.env.get("LAMBDA_ENDPOINT")!, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-
-        // console.log("🔁 Lambdaレスポンスステータス:", lambdaRes.status);
-        const lambdaResultText = await lambdaRes.text();  // 生文字列として受け取る
-        // console.log("📦 Lambdaからの生レスポンス:", lambdaResultText);
-
-        const lambdaResult = JSON.parse(lambdaResultText);  // ここでパースする
-        // console.log("✅ パース後のdownload_url:", lambdaResult.download_url);
-
-        return new Response(JSON.stringify({ download_url: lambdaResult.download_url }), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-        });
-
-
-    } catch (err) {
-        // console.error("❗Edge Function内部エラー:", err);
-        return new Response(JSON.stringify({ error: "内部エラー", details: String(err) }), { status: 500 });
-    }
+serve(async (req)=>{
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+      }
+    });
+  }
+  try {
+    const body = await req.json();
+    const lambdaRes = await fetch(Deno.env.get("LAMBDA_ENDPOINT"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    const lambdaResultText = await lambdaRes.text();
+    const lambdaResult = JSON.parse(lambdaResultText);
+    console.log(lambdaResult);
+    return new Response(JSON.stringify({
+      download_url: lambdaResult.download_url
+    }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+      }
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({
+      error: "内部エラー",
+      details: String(err)
+    }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+      }
+    });
+  }
 });
