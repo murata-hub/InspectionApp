@@ -4,6 +4,11 @@ import React from "react";
 import { Shutter, shutterFields } from "@/types/shutter";
 
 const ShutterData = ({ shutter }: { shutter: Shutter }) => {
+    const splitShutterFields = shutterFields.map(field => ({
+        ...field,
+        label: field.label.split("（")[0],
+    }));  
+
     const renderValue = (value: any) => {
         if (typeof value === "boolean") return value ? "✅" : "❌";
         if (value === null || value === undefined || value === "") return "-";
@@ -16,7 +21,7 @@ const ShutterData = ({ shutter }: { shutter: Shutter }) => {
             <h2 className="text-xl font-bold mb-4">{shutter.name}（シャッター詳細）</h2>
             <table className="w-full border-collapse border border-gray-300 text-xs">
                 <tbody>
-                    {shutterFields.map((field) => (
+                    {splitShutterFields.map((field) => (
                         <tr key={field.id}>
                             <th className="text-left border px-4 py-2 w-1/3 bg-gray-50">{field.label}</th>
                             <td className="border px-4 py-2">{renderValue(shutter[field.id as keyof Shutter])}</td>
