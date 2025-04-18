@@ -22,6 +22,10 @@ const InspectorData = ({ inspector }: { inspector: Inspector }) => {
                             <td className="border px-4 py-2">{renderValue(inspector[field.id as keyof Inspector])}</td>
                         </tr>
                     ))}
+                    <tr>
+                        <th className="text-left border px-4 py-2 bg-gray-50">更新日時</th>
+                        <td className="border px-4 py-2">{inspector.updated_at?.split("T")[0]}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

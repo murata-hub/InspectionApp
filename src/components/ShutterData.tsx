@@ -27,6 +27,10 @@ const ShutterData = ({ shutter }: { shutter: Shutter }) => {
                             <td className="border px-4 py-2">{renderValue(shutter[field.id as keyof Shutter])}</td>
                         </tr>
                     ))}
+                    <tr>
+                        <th className="text-left border px-4 py-2 bg-gray-50">更新日時</th>
+                        <td className="border px-4 py-2">{shutter.updated_at?.split("T")[0]}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
