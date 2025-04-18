@@ -115,9 +115,17 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                     console.log("📦 JSON to send:", JSON.stringify(excelJson, null, 2));
 
                     // ✅ Edge Function 経由で Lambda 呼び出し
-                    const res = await fetch("/api/excel-export", {
+                    // const res = await fetch("/api/excel-export", {
+                    //     method: "POST",
+                    //     headers: { "Content-Type": "application/json" },
+                    //     body: JSON.stringify(excelJson),
+                    // });
+                    const res = await fetch(process.env.NEXT_PUBLIC_SUPABASE_EDGE_URL!, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                          "Content-Type": "application/json",
+                          "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                        },
                         body: JSON.stringify(excelJson),
                     });
 
