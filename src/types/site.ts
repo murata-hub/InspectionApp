@@ -63,41 +63,41 @@ export const siteFields = [
     // 現場名（必須）
     { id: "name", label: "現場名", required: true, validation: (value: string) => value.trim() !== "" },
     // 現場名フリガナ（必須）
-    { id: "furigana", label: "現場名フリガナ", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "furigana", label: "現場名フリガナ", required: false, validation: (value: string) => value.trim() !== "" },
     // 所在地（必須）
-    { id: "address", label: "所在地", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "address", label: "所在地", required: false, validation: (value: string) => value.trim() !== "" },
     // 現場の用途（必須）
-    { id: "purpose", label: "現場の用途", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "purpose", label: "現場の用途", required: false, validation: (value: string) => value.trim() !== "" },
     // 所有者名（必須）
-    { id: "owner_name", label: "所有者名", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "owner_name", label: "所有者名", required: false, validation: (value: string) => value.trim() !== "" },
     // 所有者名フリガナ（必須）
-    { id: "owner_furigana", label: "所有者名フリガナ", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "owner_furigana", label: "所有者名フリガナ", required: false, validation: (value: string) => value.trim() !== "" },
     // 所有者郵便番号（7桁の数字である必要あり）
-    { id: "owner_post_number", label: "所有者郵便番号", required: true, validation: (value: string) => /^(\d{7}|\d{3}-\d{4})$/.test(value) },
+    { id: "owner_post_number", label: "所有者郵便番号", required: false, validation: (value: string) => /^(\d{7}|\d{3}-\d{4})$/.test(value) },
     // 所有者住所（必須）
-    { id: "owner_address", label: "所有者住所", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "owner_address", label: "所有者住所", required: false, validation: (value: string) => value.trim() !== "" },
     // 所有者電話番号（半角数字・ハイフンのみ許可）
-    { id: "owner_phone_number", label: "所有者電話番号", required: true, validation: (value: string) => /^[0-9-]+$/.test(value) },
+    { id: "owner_phone_number", label: "所有者電話番号", required: false, validation: (value: string) => /^[0-9-]+$/.test(value) },
     // 管理者名（必須）
-    { id: "manager_name", label: "管理者名", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "manager_name", label: "管理者名", required: false, validation: (value: string) => value.trim() !== "" },
     // 管理者名フリガナ（必須）
-    { id: "manager_furigana", label: "管理者名フリガナ", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "manager_furigana", label: "管理者名フリガナ", required: false, validation: (value: string) => value.trim() !== "" },
     // 管理者郵便番号（7桁の数字である必要あり）
-    { id: "manager_post_number", label: "管理者郵便番号", required: true, validation: (value: string) => /^(\d{7}|\d{3}-\d{4})$/.test(value) },
+    { id: "manager_post_number", label: "管理者郵便番号", required: false, validation: (value: string) => /^(\d{7}|\d{3}-\d{4})$/.test(value) },
     // 管理者住所（必須）
-    { id: "manager_address", label: "管理者住所", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "manager_address", label: "管理者住所", required: false, validation: (value: string) => value.trim() !== "" },
     // 管理者電話番号（半角数字・ハイフンのみ許可）
-    { id: "manager_phone_number", label: "管理者電話番号", required: true, validation: (value: string) => /^[0-9-]+$/.test(value) },
+    { id: "manager_phone_number", label: "管理者電話番号", required: false, validation: (value: string) => /^[0-9-]+$/.test(value) },
     // 階数（地上）（0 以上の数値である必要あり）
-    { id: "num_floors_above", label: "階数（地上）", type: "number", required: true, validation: (value: number) => value >= 0 },
+    { id: "num_floors_above", label: "階数（地上）", type: "number", required: false, validation: (value: number) => value >= 0 },
     // 階数（地下）（0 以上の数値である必要あり）
-    { id: "num_floors_below", label: "階数（地下）", type: "number", required: true, validation: (value: number) => value >= 0 },
+    { id: "num_floors_below", label: "階数（地下）", type: "number", required: false, validation: (value: number) => value >= 0 },
     // 建築面積（㎡）（0 より大きく、小数点以下 2 桁以内である必要あり）
     {
         id: "building_area",
         label: "建築面積（㎡）",
         type: "number",
-        required: true,
+        required: false,
         validation: (value: number) => value > 0 && /^\d+(\.\d{1,2})?$/.test(String(value)),
     },
     // 延べ面積（㎡）（0 より大きく、小数点以下 2 桁以内である必要あり）
@@ -105,13 +105,13 @@ export const siteFields = [
         id: "total_floor_area",
         label: "延べ面積（㎡）",
         type: "number",
-        required: true,
+        required: false,
         validation: (value: number) => value > 0 && /^\d+(\.\d{1,2})?$/.test(String(value)),
     },
     // 確認済証交付年月日（有効な日付形式である必要あり）
-    { id: "confirmation_certificate_date", label: "確認済証交付年月日", type: "date", required: true, validation: (value: string) => !!Date.parse(value) },
+    { id: "confirmation_certificate_date", label: "確認済証交付年月日", type: "date", required: false, validation: (value: string) => !!Date.parse(value) },
     // 確認済証番号（必須）
-    { id: "confirmation_certificate_number", label: "確認済証番号", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "confirmation_certificate_number", label: "確認済証番号", required: false, validation: (value: string) => value.trim() !== "" },
     // 確認済証交付者_建築主事等（チェックボックス：true/false）
     {
         id: "is_confirmation_by_building_officer",
@@ -134,9 +134,9 @@ export const siteFields = [
         validation: (value: string) => value === "" || value.trim() !== "",
     },
     // 検査済証交付年月日（有効な日付形式である必要あり）
-    { id: "inspection_certificate_date", label: "検査済証交付年月日", type: "date", required: true, validation: (value: string) => !!Date.parse(value) },
+    { id: "inspection_certificate_date", label: "検査済証交付年月日", type: "date", required: false, validation: (value: string) => !!Date.parse(value) },
     // 検査済証番号（必須）
-    { id: "inspection_certificate_number", label: "検査済証番号", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "inspection_certificate_number", label: "検査済証番号", required: false, validation: (value: string) => value.trim() !== "" },
     // 検査済証交付者_建築主事等（チェックボックス：true/false）
     {
         id: "is_inspection_by_building_officer",
