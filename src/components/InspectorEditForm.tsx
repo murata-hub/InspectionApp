@@ -82,7 +82,7 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
         }
     
         try {
-            console.log(formData);
+            // console.log(formData);
     
             const sanitizedFormData = {
                 ...formData,
