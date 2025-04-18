@@ -5,25 +5,38 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Logout from "@/components/Logout";
+import { useCompanies } from "@/lib/hooks/useCompanies";
 
 interface SidebarProps {
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
-    myCompanyType: string | null;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, myCompanyType }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const pathname = usePathname();
     const [isUnlocked, setIsUnlocked] = useState(false);
+    const { fetchMyCompanyType, myCompanyType, setMyCompanyType } = useCompanies();
 
     useEffect(() => {
-    if (typeof window !== "undefined") {
-        const unlocked = localStorage.getItem("pageUnlocked") !== null;
-        setIsUnlocked(unlocked);
-    }
+        if (typeof window !== "undefined") {
+            const unlocked = localStorage.getItem("pageUnlocked") !== null;
+            setIsUnlocked(unlocked);
+        }
     }, []);
+
+    useEffect(() => {
+        const companyTypeFromLocal = localStorage.getItem("company_type");
+        if (companyTypeFromLocal) {
+            // すでにあるならfetchしなくていい
+            setMyCompanyType(companyTypeFromLocal);
+            return;
+        }
+        if (userId) {
+            fetchMyCompanyType(userId);
+        }
+    }, [userId]);
 
     useEffect(() => {
         const fetchSession = async () => {

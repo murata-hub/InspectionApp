@@ -52,7 +52,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <body className="bg-gray-100 text-gray-700">
                 <div className="flex h-screen relative">
                     {/* サイドバー */}
-                    <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} myCompanyType={myCompanyType} />
+                    <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
                     {/* メインコンテンツ */}
                     <div 
