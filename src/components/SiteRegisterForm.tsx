@@ -72,10 +72,15 @@ const SiteRegisterForm = ({ onClose, company, permittedCompanies }: { onClose: (
     });
 
     const handleSiteDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { id, value } = e.target;
+        const { id, value, type } = e.target;
+    
         setFormData((prev) => ({
             ...prev,
-            [id]: value,
+            [id]: type === "checkbox"
+                ? (e.target as HTMLInputElement).checked
+                : type === "number"
+                    ? (value !== "" ? parseInt(value, 10) : null)  // "" のみ null にする
+                    : value
         }));
     };
 
