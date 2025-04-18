@@ -138,6 +138,7 @@ export function useAuth() {
 
     // ✅ パスワードリセットリンク送信
     const requestPasswordReset = async (email: string) => {
+        setLoading(true);
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
                 redirectTo: `${process.env.NEXT_PUBLIC_REDIRECT_URL}/reset-password`,
@@ -146,11 +147,14 @@ export function useAuth() {
             return { success: true, message: "パスワードリセットのリンクを送信しました。" };
         } catch (error: any) {
             return { success: false, error: error.message };
+        } finally {
+            setLoading(false);
         }
     };
 
     // ✅ パスワード更新
     const updatePassword = async (newPassword: string) => {
+        setLoading(true);
         try {
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
             if (!passwordRegex.test(newPassword)) {
@@ -172,6 +176,8 @@ export function useAuth() {
             return { success: true, message: "パスワードが正常に更新されました。" };
         } catch (error: any) {
             return { success: false, error: error.message };
+        } finally {
+            setLoading(false);
         }
     };
 
