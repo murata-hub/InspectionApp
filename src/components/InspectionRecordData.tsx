@@ -9,6 +9,7 @@ import { useSites } from "@/lib/hooks/useSites";
 import { useShutters } from "@/lib/hooks/useShutters";
 import { useInspectors } from "@/lib/hooks/useInspectors";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { supabaseEdgeUrl, supabaseAnonKey } from "@/lib/supabase";
 
 const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectionRecord: InspectionRecord; showExcelButton: boolean; }) => {
     const { fetchInspectionResults, inspectionResults, error } = useInspectionResults();
@@ -120,11 +121,12 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                     //     headers: { "Content-Type": "application/json" },
                     //     body: JSON.stringify(excelJson),
                     // });
-                    const res = await fetch(process.env.NEXT_PUBLIC_SUPABASE_EDGE_URL!, {
+                    console.log(supabaseEdgeUrl);
+                    const res = await fetch(supabaseEdgeUrl, {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
-                          "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                          "Authorization": `Bearer ${supabaseAnonKey}`,
                         },
                         body: JSON.stringify(excelJson),
                     });
