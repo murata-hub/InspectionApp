@@ -16,7 +16,7 @@ export default function LoginCheck({ children }: { children: React.ReactNode }) 
     const pathname = usePathname();
     const { getUserId, logout } = useAuth();
     const [userId, setUserId] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [checked, setChecked] = useState(false);
     const [hasRedirected, setHasRedirected] = useState(false);
 
     useEffect(() => {
@@ -30,16 +30,15 @@ export default function LoginCheck({ children }: { children: React.ReactNode }) 
                     await logout();
                     router.push("/login");
                 }
-                setLoading(false);
                 return;
             }
             setUserId(uid);
-            setLoading(false);
+            setChecked(true);
         };
         checkUser();
     }, [getUserId, logout, router, pathname, hasRedirected]); // ✅ hasRedirected を使って二度目以降は止める
 
-    if (loading) {
+    if (!checked) {
         return <div className="flex justify-center items-center h-screen">読込中...</div>;
     }
 
