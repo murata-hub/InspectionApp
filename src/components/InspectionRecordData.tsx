@@ -45,12 +45,14 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
     const handleExportToExcel = async () => {
         setExporting(true);
         try {
+            console.log("🚀 Export Start");
             if (sites?.length && shutters?.length) {
                 const ids: string[] = [inspectionRecord.lead_inspector_id];
                 if (inspectionRecord.sub_inspector_id_1) {
                     ids.push(inspectionRecord.sub_inspector_id_1);
                 }
                 const inspectors = await fetchInspectorsByIds(ids);
+                console.log("🕵️‍♂️ Inspectors:", inspectors);
                 if (inspectors?.length) {
                     const lead_inspector = inspectors[0];
                     const sub_inspector = inspectors[1] || null;
@@ -110,6 +112,8 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                         excelJson.sheet2.site.inspection_certificate_day = inspection_certificate_day;
                     }
 
+                    console.log("📦 JSON to send:", JSON.stringify(excelJson, null, 2));
+
                     // ✅ Edge Function 経由で Lambda 呼び出し
                     const res = await fetch("/api/excel-export", {
                         method: "POST",
@@ -117,9 +121,12 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                         body: JSON.stringify(excelJson),
                     });
 
+                    console.log("📡 Response status:", res.status);
+
                     if (!res.ok) throw new Error("エクスポート失敗");
 
                     const { download_url } = await res.json();
+                    console.log("📥 Download URL:", download_url);
 
                     // 🔽 ダイアログでユーザーに確認
                     const confirmed = window.confirm("Excelファイルへのデータ入力に成功しました。ダウンロードしますか？");
