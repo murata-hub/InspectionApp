@@ -108,8 +108,13 @@ const SiteRegisterForm = ({ onClose, company, permittedCompanies }: { onClose: (
         }
 
         try {
+            const sanitizedFormData = {
+                ...formData,
+                confirmation_certificate_date: formData.confirmation_certificate_date || null,
+                inspection_certificate_date: formData.inspection_certificate_date || null,
+            };
             // **Step 1: 現場 (`sites`) を作成**
-            const { success, data, message } = await createSite(formData);
+            const { success, data, message } = await createSite(sanitizedFormData);
             if (!success) throw new Error(message);
 
             const newSiteId = data[0]?.id; // 作成された現場ID

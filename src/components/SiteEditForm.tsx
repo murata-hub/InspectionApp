@@ -140,11 +140,16 @@ const SiteEditForm = ({ onClose, site, company, permittedCompanies }: { onClose:
         }
 
         try {
+            const sanitizedFormData = {
+                ...formData,
+                confirmation_certificate_date: formData.confirmation_certificate_date || null,
+                inspection_certificate_date: formData.inspection_certificate_date || null,
+            };
             // **Step 1: 現場 (`sites`) を更新**
-            const { success, data } = await updateSite(site.id, formData);
+            const { success, data } = await updateSite(site.id, sanitizedFormData);
             if (!success) throw new Error();
 
-            console.log(formData);
+            // console.log(formData);
 
             const newSiteId = data[0]?.id; // 更新された現場ID
             // console.log("✅ 現場更新成功! site_id:", newSiteId);
