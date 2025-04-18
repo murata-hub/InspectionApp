@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/hooks/useAuth";
 import Link from "next/link";
@@ -11,27 +11,10 @@ export default function ResetPasswordPage() {
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const [accessToken, setAccessToken] = useState<string | null>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.substring(1));
-        const token = params.get("access_token");
-
-        if (token) {
-            setAccessToken(token);
-        } else {
-            setError("無効なパスワードリセットリンクです。");
-        }
-    }, []);
 
     const handlePasswordReset = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!accessToken) {
-            setError("パスワードリセットリンクが無効です。");
-            return;
-        }
 
         const { success, error } = await updatePassword(newPassword);
 
@@ -41,7 +24,7 @@ export default function ResetPasswordPage() {
             setMessage("パスワードが正常に更新されました。トップページにリダイレクトします。");
             setTimeout(() => {
                 router.push("/");
-            }, 2000);
+            }, 1000);
         }
     };
 
