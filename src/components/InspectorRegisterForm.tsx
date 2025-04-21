@@ -68,6 +68,7 @@ const InspectorRegisterForm = ({ onClose }: { onClose: () => void }) => {
 
         if (hasError) {
             setLoading(false);
+            alert("入力形式が正しくないものがあります。ご確認ください。");
             return;
         }
     

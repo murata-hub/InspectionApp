@@ -73,6 +73,7 @@ const InspectorEditForm = ({ onClose, editTarget }: { onClose: () => void; editT
 
         if (hasError) {
             setLoading(false);
+            alert("入力形式が正しくないものがあります。ご確認ください。");
             return;
         }
 

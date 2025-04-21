@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InspectionResultOrganizer from "./InspectionResultOrganizer";
 import InspectionRecordsHistoryTable from "./InspectionRecordsHistoryTable";
 import InspectionRecordsHistoryTableModal from "./InspectionRecordsHistoryTableModal";
+import ShutterEditFormInRecordForm from "./ShutterEditFormInRecordForm";
 import { InspectionRecord } from "@/types/inspection_record";
 import { InspectionResult } from "@/types/inspection_result";
 import { useCompanies } from "@/lib/hooks/useCompanies";
@@ -13,6 +14,7 @@ import { useInspectors } from "@/lib/hooks/useInspectors";
 import { useInspectionRecords } from "@/lib/hooks/useInspectionRecords";
 import { useInspectionResults } from "@/lib/hooks/useInspectionResults";
 import { inspectionItems } from "@/data/inspectionItems";
+import { Shutter, shutterFields } from "@/types/shutter";
 
 const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
     const { createInspectionRecord, fetchInspectionRecords, inspectionRecords } = useInspectionRecords();
@@ -22,9 +24,13 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
     const [error, setError] = useState<string | null>(null);
     const [siteId, setSiteId] = useState<string | null>(null);
     const [shutterId, setShutterId] = useState<string | null>(null);
+    const [selectedShutter, setSelectedShutter] = useState<Shutter | null>(null);
+    const [shutterFormData, setShutterFormData] = useState<Shutter>(selectedShutter);
+    const [shutterErrors, setShutterErrors] = useState<{ [key: string]: string | null }>({});
+    const shutterFormFields = shutterFields.slice(1);
     const { fetchMyCompany, myCompany } = useCompanies();
     const { fetchSites, sites } = useSites();
-    const { fetchShutters, shutters } = useShutters();
+    const { fetchShutters, shutters, updateShutter } = useShutters();
     const { fetchInspectors, inspectors } = useInspectors();
     const today = new Date().toISOString().split("T")[0];
     const userId = localStorage.getItem("user_id");
@@ -80,6 +86,17 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
         }
     }, [siteId]);
 
+    useEffect(() => {
+        if (shutters?.length) {
+            // ✅ シャッターオブジェクトもセット
+            const shutter = shutters?.find((s) => s.id === shutterId) || null;
+            if (shutter) {
+                setSelectedShutter(shutter);
+                setShutterFormData(shutter);
+            }
+        }
+    }, [shutters]);
+
     const handleResultChange = (index: number, updated: Partial<InspectionResult>) => {
         const newResults = [...inspectionResults];
         newResults[index] = { ...newResults[index], ...updated };
@@ -127,11 +144,75 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
             }));
         }
     };
+
+    const handleShutterSubmit = async () => {
+        setLoading(true);
+        setError(null);
+
+        // 🔍 入力バリデーションチェック
+        const newErrors: { [key: string]: string | null } = {};
+        let hasError = false;
+
+        shutterFormFields.forEach((field) => {
+            const value = shutterFormData[field.id as keyof Shutter]?.toString() || "";
+            const isValid = field.validation ? field.validation(value) : true;
+
+            if (!isValid) {
+                newErrors[field.id] = `${field.label}の形式が正しくありません。`;
+                hasError = true;
+            } else {
+                newErrors[field.id] = null;
+            }
+        });
+
+        setShutterErrors(newErrors);
+
+        if (hasError) {
+            setLoading(false);
+            alert("入力形式が正しくないものがあります。ご確認ください。");
+            return false;
+        }
+
+        if (!shutterFormData.id) {
+            alert("編集対象が不明です。処理を実行できません。");
+            return false;
+        }
+
+        try {
+            if (!userId) {
+                alert("ユーザーIDが不明です。処理を実行できません。");
+                return false;
+            }
+
+            const updateResult = await updateShutter(selectedShutter.id, shutterFormData);
+
+            if (!updateResult.success) {
+                throw new Error(`Supabase 更新に失敗: ${updateResult.error}`);
+            }
+
+            // console.log("シャッター情報を更新しました。");
+            return true;
+        } catch (err: any) {
+            // console.error("🔴 エラー:", err);
+            setError(err.message);
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        // ✅ 先にシャッター編集を完了させる
+        if (selectedShutter) {
+            const success = await handleShutterSubmit();
+            if (!success) return;
+        } else {
+            alert("シャッターを選択してください。");
+            return;
+        }
         try {
             if (!userId) {
                 alert("ユーザーIDが不明です。処理を実行できません。");
@@ -204,6 +285,9 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
         const selectedShutterId = e.target.value;
         setShutterId(selectedShutterId); // ✅ State を更新
         localStorage.setItem("shutter_id", selectedShutterId); // ✅ localStorage に保存
+        // ✅ シャッターオブジェクトもセット
+        const shutter = shutters?.find((s) => s.id === selectedShutterId) || null;
+        setSelectedShutter(shutter);
     };
 
     return (
@@ -286,25 +370,44 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
                     </div>
                 ) : (
                     siteId && (
-                        <div className="mb-4">
-                            <label className="block font-bold mb-2" htmlFor="shutter_id">
-                                シャッター<span className="text-red-500">*</span>
-                            </label>
-                            <select
-                                className="w-full px-4 py-2 border rounded-lg"
-                                id="shutter_id"
-                                value={shutterId || ""}
-                                onChange={handleShutterChange}
-                                required
-                            >
-                                <option value="">シャッターを選択してください</option>
-                                {shutters?.map((shutter) => (
-                                    <option key={shutter.id} value={shutter.id}>
-                                        {shutter.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <>
+                            <div className="mb-4">
+                                <label className="block font-bold mb-2" htmlFor="shutter_id">
+                                    シャッター<span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    className="w-full px-4 py-2 border rounded-lg"
+                                    id="shutter_id"
+                                    value={shutterId || ""}
+                                    onChange={handleShutterChange}
+                                    required
+                                >
+                                    <option value="">シャッターを選択してください</option>
+                                    {shutters?.map((shutter) => (
+                                        <option key={shutter.id} value={shutter.id}>
+                                            {shutter.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            {selectedShutter && (
+                                <ShutterEditFormInRecordForm
+                                    formData={shutterFormData}
+                                    errors={shutterErrors}
+                                    onChange={(e) => {
+                                        const { id, value, type } = e.target;
+                                        setShutterFormData((prev) => ({
+                                            ...prev,
+                                            [id]: type === "checkbox"
+                                            ? (e.target as HTMLInputElement).checked
+                                            : type === "number"
+                                                ? (value !== "" ? parseInt(value, 10) : null)
+                                                : value
+                                        }));
+                                    }}
+                                />
+                            )}
+                        </>
                     )
                 )}
 
