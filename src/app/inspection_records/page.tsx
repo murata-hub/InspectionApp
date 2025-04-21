@@ -154,7 +154,7 @@ const InspectionRecordsPage = () => {
                     <div className="sm:flex justify-between items-center mb-4">
                         <h1 className="text-xl font-bold mb-2 sm:mb-0">検査記録一覧</h1>
 
-                        {myCompany?.type === "協力会社" &&
+                        {/* {myCompany?.type === "協力会社" &&
                             <button
                                 type="button"
                                 onClick={() => {
@@ -165,7 +165,7 @@ const InspectionRecordsPage = () => {
                             >
                                 ＋ 新規作成
                             </button>
-                        }
+                        } */}
                     </div>
 
                     {/* ✅ 協力会社が登録されていない場合 */}
@@ -173,7 +173,7 @@ const InspectionRecordsPage = () => {
                         (!permittedCompanies || permittedCompanies.length === 0) ? (
                             <div className="text-center text-red-500 p-4 border border-red-500 rounded-md mb-2">
                                 📂 協力会社が登録されていません。<br />
-                                <a href="/companies" className="text-blue-500 hover:underline">
+                                <a href="/profile" className="text-blue-500 hover:underline">
                                     協力会社を登録する
                                 </a>
                             </div>

@@ -23,17 +23,17 @@ export const inspectorFields = [
     // 検査者名（必須）
     { id: "name", label: "検査者名", required: true, validation: (value: string) => value.trim() !== "" },
     // 氏名のフリガナ（必須）
-    { id: "furigana", label: "氏名のフリガナ", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "furigana", label: "氏名のフリガナ", required: false, validation: (value: string) => value.trim() === "" || value.trim() !== "" },
     // 郵便番号（必須, 7桁の数字）
-    { id: "post_number", label: "郵便番号", required: true, validation: (value: string) => /^(\d{7}|\d{3}-\d{4})$/.test(value) },
+    { id: "post_number", label: "郵便番号", required: false, validation: (value: string) => value.trim() === "" || /^(\d{7}|\d{3}-\d{4})$/.test(value) },
     // 所在地（必須）
-    { id: "address", label: "所在地", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "address", label: "所在地", required: false, validation: (value: string) => value.trim() === "" || value.trim() !== "" },
     // 電話番号（必須, 半角数字・ハイフンのみ）
-    { id: "phone_number", label: "電話番号", required: true, validation: (value: string) => /^[0-9-]+$/.test(value) },
+    { id: "phone_number", label: "電話番号", required: false, validation: (value: string) => value.trim() === "" || /^[0-9-]+$/.test(value) },
     // 検査者番号（必須）
-    { id: "inspector_number", label: "検査者番号", required: true, validation: (value: string) => value === "" || value.trim() !== "" },
+    { id: "inspector_number", label: "検査者番号", required: false, validation: (value: string) => value.trim() === "" || value.trim() !== "" },
     // 勤務先名（必須）
-    { id: "workplace_name", label: "勤務先名", required: true, validation: (value: string) => value.trim() !== "" },
+    { id: "workplace_name", label: "勤務先名", required: false, validation: (value: string) => value.trim() === "" || value.trim() !== "" },
 ];
 
 // 補完するフィールド
