@@ -273,23 +273,23 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                     </tr>
                     <tr>
                         <th className="border px-4 py-2 text-left">機種</th>
-                        <td className="border px-4 py-2">{shutters?.[0]?.model_number || "-"}</td>
+                        <td className="border px-4 py-2">{inspectionRecord.model_number || "-"}</td>
                     </tr>
                     <tr>
                         <th className="border px-4 py-2 text-left">幅</th>
-                        <td className="border px-4 py-2">{shutters?.[0]?.width || "-"}</td>
+                        <td className="border px-4 py-2">{inspectionRecord.width || "-"}</td>
                     </tr>
                     <tr>
                         <th className="border px-4 py-2 text-left">高さ</th>
-                        <td className="border px-4 py-2">{shutters?.[0]?.height || "-"}</td>
+                        <td className="border px-4 py-2">{inspectionRecord.height || "-"}</td>
                     </tr>
                     <tr>
                         <th className="border px-4 py-2 text-left">使用回数</th>
-                        <td className="border px-4 py-2">{shutters?.[0]?.usage_count ?? "-"}</td>
+                        <td className="border px-4 py-2">{inspectionRecord.usage_count ?? "-"}</td>
                     </tr>
                     <tr>
                         <th className="border px-4 py-2 text-left">設置場所</th>
-                        <td className="border px-4 py-2">{shutters?.[0]?.installation_location || "-"}</td>
+                        <td className="border px-4 py-2">{inspectionRecord.installation_location || "-"}</td>
                     </tr>
                 </tbody>
             </table>
