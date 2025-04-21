@@ -13,6 +13,7 @@ const ShutterEditFormInRecordForm = ({
     errors: { [key: string]: string | null };
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 }) => {
+    if (!formData) return null;
     const shutterFormFields = shutterFields.slice(1);
 
     return (
