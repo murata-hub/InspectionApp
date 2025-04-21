@@ -45,6 +45,11 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
         sub_inspector_2: "",
         sub_inspector_id_2: "",
         special_note: "",
+        model_number: "",
+        width: "",
+        height: "",
+        usage_count: 0,
+        installation_location: "",
     });
     const [inspectionResults, setInspectionResults] = useState<InspectionResult[]>(
         inspectionItems.map((item, index) => ({
@@ -222,6 +227,11 @@ const InspectionRecordRegisterForm = ({ onClose }: { onClose: () => void }) => {
                 ...formData,
                 company_id: userId,
                 shutter_id: shutterId, // ✅ shutterId も登録
+                model_number: shutterFormData.model_number,
+                width: shutterFormData.width,
+                height: shutterFormData.height,
+                usage_count: shutterFormData.usage_count,
+                installation_location: shutterFormData.installation_location,
             };
             // console.log(sanitizedFormData);
 

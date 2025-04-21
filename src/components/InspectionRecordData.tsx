@@ -63,13 +63,22 @@ const InspectionRecordData = ({ inspectionRecord, showExcelButton }: { inspectio
                     const today_year = today.getFullYear();
                     const today_month = today.getMonth() + 1;
                     const today_day = today.getDate();
+
+                    const inspectionRecordShutterData = {
+                        name: shutter.name,
+                        model_number: inspectionRecord.model_number,
+                        width: inspectionRecord.width,
+                        height: inspectionRecord.height,
+                        usage_count: inspectionRecord.usage_count,
+                        installation_location: inspectionRecord.installation_location
+                    };
                     
                     // エクセルに利用するデータを整形
                     const excelJson = {
                         sheet1: {
                             inspection_record: inspectionRecord,
                             inspection_results: inspectionResults,
-                            shutter: shutter,
+                            shutter: inspectionRecordShutterData,
                         },
                         sheet2: {
                             date: {

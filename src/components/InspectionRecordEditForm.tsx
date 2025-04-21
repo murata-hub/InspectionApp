@@ -2,19 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import InspectionResultEditOrganizer from "./InspectionResultEditOrganizer";
-import { InspectionRecord } from "@/types/inspection_record";
+import { InspectionRecord, inspectionRecordShutterFields } from "@/types/inspection_record";
 import { InspectionResult } from "@/types/inspection_result";
 import { useInspectors } from "@/lib/hooks/useInspectors";
 import { useCompanies } from "@/lib/hooks/useCompanies";
 import { useInspectionRecords } from "@/lib/hooks/useInspectionRecords";
 import { useInspectionResults } from "@/lib/hooks/useInspectionResults";
 import { inspectionItems } from "@/data/inspectionItems";
+import InputField from "@/components/InputField";
 
 const InspectionRecordEditForm = ({ onClose, inspectionRecord }: { onClose: () => void; inspectionRecord: InspectionRecord; }) => {
     const { updateInspectionRecord } = useInspectionRecords();
     const { fetchInspectionResults, setInspectionResults, inspectionResults, updateInspectionResult } = useInspectionResults();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
     const { fetchMyCompany, myCompany } = useCompanies();
     const { fetchInspectors, inspectors } = useInspectors();
     const userId = localStorage.getItem("user_id");
@@ -29,6 +31,11 @@ const InspectionRecordEditForm = ({ onClose, inspectionRecord }: { onClose: () =
         sub_inspector_2: "",
         sub_inspector_id_2: "",
         special_note: "",
+        model_number: "",
+        width: "",
+        height: "",
+        usage_count: 0,
+        installation_location: "",
     });
     const [originalResults, setOriginalResults] = useState<InspectionResult[]>([]);
     const [editResults, setEditResults] = useState<InspectionResult[]>([]);
@@ -132,6 +139,30 @@ const InspectionRecordEditForm = ({ onClose, inspectionRecord }: { onClose: () =
         e.preventDefault();
         setLoading(true);
         setError(null);
+
+        // 🔍 入力バリデーションチェック
+        const newErrors: { [key: string]: string | null } = {};
+        let hasError = false;
+
+        inspectionRecordShutterFields.forEach((field) => {
+            const value = formData[field.id as keyof InspectionRecord]?.toString() || "";
+            const isValid = field.validation ? field.validation(value) : true;
+
+            if (!isValid) {
+                newErrors[field.id] = `${field.label}の形式が正しくありません。`;
+                hasError = true;
+            } else {
+                newErrors[field.id] = null;
+            }
+        });
+        setErrors(newErrors);
+
+        if (hasError) {
+            setLoading(false);
+            alert("入力形式が正しくないものがあります。ご確認ください。");
+            return;
+        }
+
         try {
             // console.log(formData);
 
@@ -198,6 +229,19 @@ const InspectionRecordEditForm = ({ onClose, inspectionRecord }: { onClose: () =
 
             {/* ✅ 現場とシャッターが選択されている場合のみフォーム表示 */}
             <form onSubmit={handleSubmit}>
+                {inspectionRecordShutterFields.map((field) => (
+                    <InputField
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        value={formData[field.id as keyof InspectionRecord] as string | number | boolean ?? ""}
+                        type={field.type || "text"}
+                        required={field.required}
+                        onChange={handleChange}
+                        error={errors[field.id] || undefined}
+                    />
+                ))}
+
                 <div className="mb-4">
                     <label className="block font-bold mb-2" htmlFor="inspection_date">検査日<span className="text-red-500">*</span></label>
                     <input className="w-full px-4 py-2 border rounded-lg" type="date" id="inspection_date" value={formData.inspection_date} onChange={handleChange} required />
@@ -214,7 +258,6 @@ const InspectionRecordEditForm = ({ onClose, inspectionRecord }: { onClose: () =
                     </div>
                 ) : (
                     <>
-
                         <div className="mb-4">
                             <label className="block font-bold mb-2" htmlFor="lead_inspector">
                                 代表検査者<span className="text-red-500">*</span>
